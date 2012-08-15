@@ -31,10 +31,11 @@ of that process from Jeffrey Horner's blog [here][jhLink1] and [here][jhLink2].
 
 When I combine this with a [github repo][ghLink] for storage, it also means I have 
 some other place to keep the raw source of my blog posts, as well as easily read
-and edit the text.
+and edit the text. For example, you can read the raw text that was used for [this
+post][rawLink].
 
-Source of this post is at https://github.com/rmflight/blogPosts/rmarkdown_post_150812.md.
-Published at http://robertmflight.blogspot.com
+Source of this post is at https://github.com/rmflight/blogPosts/blob/master/rmarkdown_post_150812.md.
+Published at http://robertmflight.blogspot.com/2012/08/loving-markdown.html
 
 
 [kLink]: http://yihui.name/knitr
@@ -45,3 +46,4 @@ Published at http://robertmflight.blogspot.com
 [jhLink1]: http://jeffreyhorner.tumblr.com/post/25804518110/blog-with-r-markdown-and-tumblr-part-i
 [jhLink2]: http://jeffreyhorner.tumblr.com/post/25943954723/blog-with-r-markdown-and-tumblr-part-ii
 [ghLink]: https://github.com/rmflight/blogPosts
+[rawLink]: https://raw.github.com/rmflight/blogPosts/master/rmarkdown_post_150812.md
