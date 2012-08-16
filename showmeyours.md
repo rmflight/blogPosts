@@ -19,7 +19,8 @@ the excelent **devtools** package.
 I like it a lot, and much prefer it over my previous Notepad++, npptoR, R gui setup.
 
 Source markdown at https://github.com/rmflight/blogPosts/blob/master/showmeyours.md
-Posted at: http://robertmflight.blogspot.com/08/showmeyours.html
+
+Posted at: http://robertmflight.blogspot.com/2012/08/show-me-yours.html
 
 [dLink]: http://danganothererror.wordpress.com/
 [dLink2]: http://danganothererror.wordpress.com/2012/08/09/show-me-yours-and-ill-show-you-mine/
