@@ -27,6 +27,15 @@ then generate `markdown` or `html`.
 It turned out that it was not that hard, but it did force me to do some things differently. This is what I want to 
 discuss here.
 
+## Advantages
+
+I actually found it much easier to have the text with the analysis (in contrast to having to be separate in a Word 
+document), and upon doing the conversion, discovered some possible numerical errors that crept in because of having
+to copy numerical results separately (that is the nice thing about being able to insert variable directly into the text). 
+In addition, the Word template for the submission didn't play nice with automatic table and figure numbering, so our
+table and figure numbering got messed up in the submission. So overall, I'd say it worked out better with the `Rmd` file
+overall, even with the having to create functions to handle table and figure numbering properly myself (see below).
+
 ## Tables and Figures
 
 As I'm sure most of you know, Word (and other WYSIWYG editors) have ability to keep track of your object numbers, this
@@ -159,6 +168,13 @@ print(plotKeep)
 
 **`r I(pasteLabel("Figure", figCounts, "f.randomFigure"))`. A random figure.**
 
+## Numerical result formatting
+
+When `R` prints a number, it normally likes to do so with lots of digits. This is not probably what you want either in
+a table or when reporting a number in a sentence. You can control that by using the `format` function. When generating
+a new variable, the number of digits to display when printing will be saved, and when used on a variable directly,
+only the defined number of digits will display.
+
 ## Echo and Include
 
 This brings up the issue of how to keep the code from appearing in the text body. I found depending on the particulars,
@@ -183,6 +199,7 @@ I do this because when I write my documents, I want the source to be readable on
 that means being displayed in the `github` file browser, which does not do line wrapping. So I set up a 120 character
 line in my editor, and try very hard to stick to that. 
 
+
 ## Function source
 
 You can find the previously mentioned functions in a github gist [here](https://gist.github.com/3858973).
@@ -192,4 +209,5 @@ You can find the previously mentioned functions in a github gist [here](https://
 The source files for this blog post can be found at: [`Rmd`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.Rmd), [`md`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.md), and [`html`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.html).
 
 Posted on October 9, 2012, at http://robertmflight.blogspot.com/2012/10/writing-papers-using-r-markdown.html
+Edit: added section on formatting numerical results
 
