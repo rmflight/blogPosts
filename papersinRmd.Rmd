@@ -1,5 +1,18 @@
 # Writing papers using R Markdown
 
+```{r knitrSetup, include=FALSE}
+# sets output for inline results nicely
+#knit_hooks$set(inline = identity) 
+
+# kills knitr if there is an error, therefore we don't waste time generating error messages
+knit_hooks$set(error = function(x, options) stop(x)) 
+```
+
+```{r rsetup, include=FALSE}
+require(ggplot2)
+
+```
+
 I have been watching the activity in [`RStudio`](rstudio.org) and [`knitr`](http://yihui.name/knitr/) for a while, and
 have even been using `Rmd` (R markdown) files in my own work as a way to easily provide commentary on an actual dataset
 analysis. Yihui has proposed [writing papers](http://yihui.name/en/2012/03/a-really-fast-statistics-journal/) in markdown and posting them to a blog as a way to host a statistics journal, and lots of people are now using `knitr` as a way
@@ -7,7 +20,7 @@ to create reproducible blog posts that include code (including yours truly).
 
 The idea of writing a paper that actually includes the necessary code to perform the analysis, and is actually readable
 in its raw form, and that someone else could actually run was pretty appealing. Unfortunately, I had not had the time
-or opportunity to actually try it, until recently we submitted a conference paper that included a lot of analysis in `R`.
+or opportunity to actually try it, until recently our group submitted a conference paper that included a lot of analysis in `R` that seemed like the perfect opportunity to try this. 
 (I will link to the paper here when I hear more, or get clearance from my PI). Originally we wrote the paper in Microsoft(r) Word, but after submission I decided to see what it would have taken to write it as an `Rmd` document that could
 then generate `markdown` or `html`.
 
@@ -115,3 +128,68 @@ To actually insert it into the text, use a code chunk with `results='asis'` and 
 ```{r tableInsert, results='asis'}
 cat(postDocInsert, sep="\n")
 ```
+
+Before inserting the table though, you might want an inline code with the table number and caption, like this:
+
+`I(pasteLabel("Table", tableCount, "t.blogPostDocs", FALSE))` This is the number of blog posts and year of training for post-docs.
+
+`r I(pasteLabel("Table", tableCount, "t.blogPostDocs", FALSE))` This is the number of blog posts and year of training for post-docs.
+
+Remember for captions to set the `insLink` variable to `FALSE` so that you don't generate a link from the caption.
+
+### Figures
+
+Oftentimes, you will have code that generates the figure, and then you want to insert the figure at a different point.
+This is accomplished by the judicious use of `echo` and `include` chunk options.
+
+For example, we can create a `ggplot2` figure and store it in a variable in one chunk, and then `print` it in a later
+chunk to actually insert it into the text body.
+
+```{r figureGeneration}
+plotData <- data.frame(x=rnorm(1000, 1, 5), y=rnorm(1000, 0, 2))
+plotKeep <- ggplot(plotData, aes(x=x, y=y)) + geom_point()
+figCounts <- incCount(figCounts, "f.randomFigure")
+```
+
+And now we decide to actually insert it using `print(plotKeep)` with the option of `echo=FALSE`:
+
+```{r figureInsert, echo=FALSE}
+print(plotKeep)
+```
+
+**`r I(pasteLabel("Figure", figCounts, "f.randomFigure"))`. A random figure.**
+
+## Echo and Include
+
+This brings up the issue of how to keep the code from appearing in the text body. I found depending on the particulars,
+either using `echo=FALSE` or `include=FALSE` would do the job. This is meant to be a paper, a reproducible one, but a 
+paper nonetheless, and therefore the code should not end up in the text body. 
+
+## References
+
+One thing I haven't done yet is convert all the references. I am planning to try using the [knitcitations](https://github.com/cboettig/knitcitations/) package. I will probably post on that experience.
+
+## HTML generation
+
+For generating a full `html` version of the paper, I change the default `RStudio` `markdown` render options like so:
+
+```
+htmlOptions <- markdownHTMLOptions(defaults=TRUE)
+htmlOptions <- htmlOptions[htmlOptions != "hard_wrap"]
+markdownToHTML(inputFile, outputFile, options = htmlOptions)
+```
+
+I do this because when I write my documents, I want the source to be readable online. If this is a `github` hosted repo,
+that means being displayed in the `github` file browser, which does not do line wrapping. So I set up a 120 character
+line in my editor, and try very hard to stick to that. 
+
+## Function source
+
+You can find the previously mentioned functions in a github gist [here](https://gist.github.com/3858973).
+
+## Post source
+
+The source files for this blog post can be found at: [`Rmd`](), [`md`](), and [`html`]().
+
+Posted on October 9, 2012, at 
+
