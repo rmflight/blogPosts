@@ -13,7 +13,7 @@ require(ggplot2)
 
 ```
 
-I have been watching the activity in [`RStudio`](rstudio.org) and [`knitr`](http://yihui.name/knitr/) for a while, and
+I have been watching the activity in [`RStudio`](http://rstudio.org) and [`knitr`](http://yihui.name/knitr/) for a while, and
 have even been using `Rmd` (R markdown) files in my own work as a way to easily provide commentary on an actual dataset
 analysis. Yihui has proposed [writing papers](http://yihui.name/en/2012/03/a-really-fast-statistics-journal/) in markdown and posting them to a blog as a way to host a statistics journal, and lots of people are now using `knitr` as a way
 to create reproducible blog posts that include code (including yours truly).
