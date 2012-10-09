@@ -18,4 +18,38 @@ discuss here.
 
 As I'm sure most of you know, Word (and other WYSIWYG editors) have ability to keep track of your object numbers, this
 is especially nice for keeping your figure and table numbers straight. Of course, there is no such ability built into
-a static text file, but I found it was easy to write a couple of functions for this.
+a static text file, but I found it was easy to write a couple of functions for this. The way I came up with is to have
+a variable that contains a label for the figure or table, a function that increments the counter when new figures or 
+tables are added, and a function that prints the associated number for a particular label. This does require a bit of 
+forethought on the part of the writer, because you may have to add a table or figure label to the variable long before
+you actually create it, but as long as you use sane (i.e. descriptive) labels, it shouldn't be a big deal. Let me show
+you what I mean.
+
+### Counting
+
+```{r counting}
+incCount <- function(inObj, useName){
+	nObj <- length(inObj)
+	useNum <- max(inObj) + 1
+	inObj <- c(inObj, useNum)
+	names(inObj)[nObj+1] <- useName
+	inObj
+}
+figCount <- c("_"=0)
+tableCount <- c("_"=0)
+```
+
+The `incCount` function is very simple, it takes an object, checks the maximum count, and then adds an incremental value
+with the supplied name. In this example, I initialized the `figCount` and `tableCount` objects with a non-sensical named
+value of zero. 
+
+Now in the process of writing, I decide I'm going to need a table on the amount of time spent by post-docs writing blog
+posts in different years of their post-doc training. Lets call this `t.blogPostDocs`. Notice that this is a fairly 
+descriptive name. We can assign it a number like so:
+
+```{r addTable}
+tableCount <- incCount(tableCount, "t.blogPostDocs")
+tableCount
+```
+
+So now we have 
