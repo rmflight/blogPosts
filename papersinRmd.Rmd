@@ -187,13 +187,17 @@ One thing I haven't done yet is convert all the references. I am planning to try
 
 ## HTML generation
 
-For generating a full `html` version of the paper, I change the default `RStudio` `markdown` render options like so:
+Because I use `RStudio`, I set up a modified function For generating a full `html` version of the paper, changing the 
+default `RStudio` `markdown` render options like so:
 
 ```
 htmlOptions <- markdownHTMLOptions(defaults=TRUE)
 htmlOptions <- htmlOptions[htmlOptions != "hard_wrap"]
 markdownToHTML(inputFile, outputFile, options = htmlOptions)
 ```
+
+This should be added to a `.Rprofile` file either in your `home` directory or in the directory you start `R` in (this
+is especially useful for modification on a per project basis).
 
 I do this because when I write my documents, I want the source to be readable online. If this is a `github` hosted repo,
 that means being displayed in the `github` file browser, which does not do line wrapping. So I set up a 120 character
@@ -209,5 +213,11 @@ You can find the previously mentioned functions in a github gist [here](https://
 The source files for this blog post can be found at: [`Rmd`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.Rmd), [`md`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.md), and [`html`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.html).
 
 Posted on October 9, 2012, at http://robertmflight.blogspot.com/2012/10/writing-papers-using-r-markdown.html
+
 Edit: added section on formatting numerical results
 
+Edit: added session info
+
+```{r sessionInfo, echo=FALSE, comment=""}
+sessionInfo()
+```

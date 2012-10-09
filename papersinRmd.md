@@ -222,13 +222,17 @@ One thing I haven't done yet is convert all the references. I am planning to try
 
 ## HTML generation
 
-For generating a full `html` version of the paper, I change the default `RStudio` `markdown` render options like so:
+Because I use `RStudio`, I set up a modified function For generating a full `html` version of the paper, changing the 
+default `RStudio` `markdown` render options like so:
 
 ```
 htmlOptions <- markdownHTMLOptions(defaults=TRUE)
 htmlOptions <- htmlOptions[htmlOptions != "hard_wrap"]
 markdownToHTML(inputFile, outputFile, options = htmlOptions)
 ```
+
+This should be added to a `.Rprofile` file either in your `home` directory or in the directory you start `R` in (this
+is especially useful for modification on a per project basis).
 
 I do this because when I write my documents, I want the source to be readable online. If this is a `github` hosted repo,
 that means being displayed in the `github` file browser, which does not do line wrapping. So I set up a 120 character
@@ -244,5 +248,35 @@ You can find the previously mentioned functions in a github gist [here](https://
 The source files for this blog post can be found at: [`Rmd`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.Rmd), [`md`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.md), and [`html`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.html).
 
 Posted on October 9, 2012, at http://robertmflight.blogspot.com/2012/10/writing-papers-using-r-markdown.html
+
 Edit: added section on formatting numerical results
+
+Edit: added session info
+
+
+```
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggplot2_0.9.2.1 knitr_0.8.1    
+
+loaded via a namespace (and not attached):
+ [1] colorspace_1.1-1   dichromat_1.2-4    digest_0.5.2      
+ [4] evaluate_0.4.2     formatR_0.6        grid_2.15.0       
+ [7] gtable_0.1.1       labeling_0.1       MASS_7.3-21       
+[10] memoise_0.1        munsell_0.4        plyr_1.7.1        
+[13] proto_0.3-9.2      RColorBrewer_1.0-5 reshape2_1.2.1    
+[16] scales_0.2.2       stringr_0.6.1      tools_2.15.0      
+```
 
