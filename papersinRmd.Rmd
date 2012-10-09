@@ -1,0 +1,21 @@
+# Writing papers using R Markdown
+
+I have been watching the activity in [`RStudio`](rstudio.org) and [`knitr`](http://yihui.name/knitr/) for a while, and
+have even been using `Rmd` (R markdown) files in my own work as a way to easily provide commentary on an actual dataset
+analysis. Yihui has proposed [writing papers](http://yihui.name/en/2012/03/a-really-fast-statistics-journal/) in markdown and posting them to a blog as a way to host a statistics journal, and lots of people are now using `knitr` as a way
+to create reproducible blog posts that include code (including yours truly).
+
+The idea of writing a paper that actually includes the necessary code to perform the analysis, and is actually readable
+in its raw form, and that someone else could actually run was pretty appealing. Unfortunately, I had not had the time
+or opportunity to actually try it, until recently we submitted a conference paper that included a lot of analysis in `R`.
+(I will link to the paper here when I hear more, or get clearance from my PI). Originally we wrote the paper in Microsoft(r) Word, but after submission I decided to see what it would have taken to write it as an `Rmd` document that could
+then generate `markdown` or `html`.
+
+It turned out that it was not that hard, but it did force me to do some things differently. This is what I want to 
+discuss here.
+
+## Tables and Figures
+
+As I'm sure most of you know, Word (and other WYSIWYG editors) have ability to keep track of your object numbers, this
+is especially nice for keeping your figure and table numbers straight. Of course, there is no such ability built into
+a static text file, but I found it was easy to write a couple of functions for this.

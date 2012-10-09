@@ -26,6 +26,6 @@ I hope others find this resource (and or approach) useful!
 Next week I hope to put up a post with more examples, although you can probably get a good idea of how it works and
 the possibilities from the publication and the website.
 
-Source hosted at https://github.com/rmflight/blogPosts/master/absidConvert_live.md
+Source hosted at https://github.com/rmflight/blogPosts/blob/master/absidConvert_live.md
 
 Posted to http://robertmflight.blogspot.com/2012/09/absidconvert-new-method-for-converting_12.html
