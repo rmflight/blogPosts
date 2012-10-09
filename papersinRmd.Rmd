@@ -189,7 +189,7 @@ You can find the previously mentioned functions in a github gist [here](https://
 
 ## Post source
 
-The source files for this blog post can be found at: [`Rmd`](), [`md`](), and [`html`]().
+The source files for this blog post can be found at: [`Rmd`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.Rmd), [`md`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.md), and [`html`](https://github.com/rmflight/blogPosts/blob/master/papersinRmd.html).
 
-Posted on October 9, 2012, at 
+Posted on October 9, 2012, at http://robertmflight.blogspot.com/2012/10/writing-papers-using-r-markdown.html
 
