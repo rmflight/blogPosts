@@ -52,4 +52,66 @@ tableCount <- incCount(tableCount, "t.blogPostDocs")
 tableCount
 ```
 
-So now we have 
+### Inserting
+
+So now we have a variable with a named number we can refer to. But how do we insert it into the text? We are going to
+use another function that will let us insert either the text with a link, or just the text itself.
+
+```{r pasteText}
+pasteLabel <- function(preText, inObj, objName, insLink=TRUE){
+	objNum <- inObj[objName]
+	
+	useText <- paste(preText, objNum, sep=" ")
+	if (insLink){
+		useText <- paste("[", useText, "](#", objName, ")", sep="")
+	}
+	useText
+}
+```
+
+This function allows us to insert the table number like so:
+
+```{r insertTableText, eval=FALSE}
+r I(pasteLabel("Table", tableCount, "t.blogPostDocs"))
+```
+
+This would be inserted into a normal `inline` code block. The `I` makes sure that the text will appear as normal text,
+and not get formatted as a code block. The default behavior is to insert as a relative link, thereby enabling the use
+of relative links to link where a table / figure is mentioned to its actual location. For example, we can insert the 
+anchor link like so:
+
+```
+<a id="t.blogPostDocs"></a>
+```
+
+### Markdown Tables
+
+Followed by the actual table text. This brings up the subject of `markdown` tables. I also wrote a function (thanks to
+Yihui again) that transforms a normal `R` `data.frame` to a `markdown` table.
+
+```{r tableFunction}
+tableCat <- function(inFrame){
+	outText <- paste(names(inFrame), collapse=" | ")
+	outText <- c(outText, paste(rep("---", ncol(inFrame)), collapse=" | "))
+	invisible(apply(inFrame, 1, function(inRow){
+		outText <<- c(outText, paste(inRow, collapse=" | "))
+	}))
+	return(outText)
+}
+```
+
+Lets see it in action.
+
+```{r tableExample}
+postDocBlogs <- data.frame(PD=c("p1", "p2", "p3"), NBlog=c(4, 10, 2), Year=c(1, 4, 2))
+postDocBlogs
+
+postDocInsert <- tableCat(postDocBlogs)
+postDocInsert
+```
+
+To actually insert it into the text, use a code chunk with `results='asis'` and `echo=FALSE`. 
+
+```{r tableInsert, results='asis'}
+cat(postDocInsert, sep="\n")
+```
