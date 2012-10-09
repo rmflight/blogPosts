@@ -1,0 +1,210 @@
+<h1>Writing papers using R Markdown</h1>
+
+<p>I have been watching the activity in <a href="rstudio.org"><code>RStudio</code></a> and <a href="http://yihui.name/knitr/"><code>knitr</code></a> for a while, and
+have even been using <code>Rmd</code> (R markdown) files in my own work as a way to easily provide commentary on an actual dataset
+analysis. Yihui has proposed <a href="http://yihui.name/en/2012/03/a-really-fast-statistics-journal/">writing papers</a> in markdown and posting them to a blog as a way to host a statistics journal, and lots of people are now using <code>knitr</code> as a way
+to create reproducible blog posts that include code (including yours truly).</p>
+
+<p>The idea of writing a paper that actually includes the necessary code to perform the analysis, and is actually readable
+in its raw form, and that someone else could actually run was pretty appealing. Unfortunately, I had not had the time
+or opportunity to actually try it, until recently our group submitted a conference paper that included a lot of analysis in <code>R</code> that seemed like the perfect opportunity to try this. 
+(I will link to the paper here when I hear more, or get clearance from my PI). Originally we wrote the paper in Microsoft&reg; Word, but after submission I decided to see what it would have taken to write it as an <code>Rmd</code> document that could
+then generate <code>markdown</code> or <code>html</code>.</p>
+
+<p>It turned out that it was not that hard, but it did force me to do some things differently. This is what I want to 
+discuss here.</p>
+
+<h2>Tables and Figures</h2>
+
+<p>As I&#39;m sure most of you know, Word (and other WYSIWYG editors) have ability to keep track of your object numbers, this
+is especially nice for keeping your figure and table numbers straight. Of course, there is no such ability built into
+a static text file, but I found it was easy to write a couple of functions for this. The way I came up with is to have
+a variable that contains a label for the figure or table, a function that increments the counter when new figures or 
+tables are added, and a function that prints the associated number for a particular label. This does require a bit of 
+forethought on the part of the writer, because you may have to add a table or figure label to the variable long before
+you actually create it, but as long as you use sane (i.e. descriptive) labels, it shouldn&#39;t be a big deal. Let me show
+you what I mean.</p>
+
+<h3>Counting</h3>
+
+<pre><code class="r">incCount &lt;- function(inObj, useName) {
+    nObj &lt;- length(inObj)
+    useNum &lt;- max(inObj) + 1
+    inObj &lt;- c(inObj, useNum)
+    names(inObj)[nObj + 1] &lt;- useName
+    inObj
+}
+figCount &lt;- c(`_` = 0)
+tableCount &lt;- c(`_` = 0)
+</code></pre>
+
+<p>The <code>incCount</code> function is very simple, it takes an object, checks the maximum count, and then adds an incremental value
+with the supplied name. In this example, I initialized the <code>figCount</code> and <code>tableCount</code> objects with a non-sensical named
+value of zero. </p>
+
+<p>Now in the process of writing, I decide I&#39;m going to need a table on the amount of time spent by post-docs writing blog
+posts in different years of their post-doc training. Lets call this <code>t.blogPostDocs</code>. Notice that this is a fairly 
+descriptive name. We can assign it a number like so:</p>
+
+<pre><code class="r">tableCount &lt;- incCount(tableCount, &quot;t.blogPostDocs&quot;)
+tableCount
+</code></pre>
+
+<pre><code>##              _ t.blogPostDocs 
+##              0              1
+</code></pre>
+
+<h3>Inserting</h3>
+
+<p>So now we have a variable with a named number we can refer to. But how do we insert it into the text? We are going to
+use another function that will let us insert either the text with a link, or just the text itself.</p>
+
+<pre><code class="r">pasteLabel &lt;- function(preText, inObj, objName, insLink = TRUE) {
+    objNum &lt;- inObj[objName]
+
+    useText &lt;- paste(preText, objNum, sep = &quot; &quot;)
+    if (insLink) {
+        useText &lt;- paste(&quot;[&quot;, useText, &quot;](#&quot;, objName, &quot;)&quot;, sep = &quot;&quot;)
+    }
+    useText
+}
+</code></pre>
+
+<p>This function allows us to insert the table number like so:</p>
+
+<pre><code class="r">r I(pasteLabel(&quot;Table&quot;, tableCount, &quot;t.blogPostDocs&quot;))
+</code></pre>
+
+<p>This would be inserted into a normal <code>inline</code> code block. The <code>I</code> makes sure that the text will appear as normal text,
+and not get formatted as a code block. The default behavior is to insert as a relative link, thereby enabling the use
+of relative links to link where a table / figure is mentioned to its actual location. For example, we can insert the 
+anchor link like so:</p>
+
+<pre><code>&lt;a id=&quot;t.blogPostDocs&quot;&gt;&lt;/a&gt;
+</code></pre>
+
+<h3>Markdown Tables</h3>
+
+<p>Followed by the actual table text. This brings up the subject of <code>markdown</code> tables. I also wrote a function (thanks to
+Yihui again) that transforms a normal <code>R</code> <code>data.frame</code> to a <code>markdown</code> table.</p>
+
+<pre><code class="r">tableCat &lt;- function(inFrame) {
+    outText &lt;- paste(names(inFrame), collapse = &quot; | &quot;)
+    outText &lt;- c(outText, paste(rep(&quot;---&quot;, ncol(inFrame)), collapse = &quot; | &quot;))
+    invisible(apply(inFrame, 1, function(inRow) {
+        outText &lt;&lt;- c(outText, paste(inRow, collapse = &quot; | &quot;))
+    }))
+    return(outText)
+}
+</code></pre>
+
+<p>Lets see it in action.</p>
+
+<pre><code class="r">postDocBlogs &lt;- data.frame(PD = c(&quot;p1&quot;, &quot;p2&quot;, &quot;p3&quot;), NBlog = c(4, 10, 2), Year = c(1, 
+    4, 2))
+postDocBlogs
+</code></pre>
+
+<pre><code>##   PD NBlog Year
+## 1 p1     4    1
+## 2 p2    10    4
+## 3 p3     2    2
+</code></pre>
+
+<pre><code class="r">
+postDocInsert &lt;- tableCat(postDocBlogs)
+postDocInsert
+</code></pre>
+
+<pre><code>## [1] &quot;PD | NBlog | Year&quot; &quot;--- | --- | ---&quot;   &quot;p1 |  4 | 1&quot;      
+## [4] &quot;p2 | 10 | 4&quot;       &quot;p3 |  2 | 2&quot;
+</code></pre>
+
+<p>To actually insert it into the text, use a code chunk with <code>results=&#39;asis&#39;</code> and <code>echo=FALSE</code>. </p>
+
+<pre><code class="r">cat(postDocInsert, sep = &quot;\n&quot;)
+</code></pre>
+
+<table><thead>
+<tr>
+<th>PD</th>
+<th>NBlog</th>
+<th>Year</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>p1</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>p2</td>
+<td>10</td>
+<td>4</td>
+</tr>
+<tr>
+<td>p3</td>
+<td>2</td>
+<td>2</td>
+</tr>
+</tbody></table>
+
+<p>Before inserting the table though, you might want an inline code with the table number and caption, like this:</p>
+
+<p><code>I(pasteLabel(&quot;Table&quot;, tableCount, &quot;t.blogPostDocs&quot;, FALSE))</code> This is the number of blog posts and year of training for post-docs.</p>
+
+<p>Table 1 This is the number of blog posts and year of training for post-docs.</p>
+
+<p>Remember for captions to set the <code>insLink</code> variable to <code>FALSE</code> so that you don&#39;t generate a link from the caption.</p>
+
+<h3>Figures</h3>
+
+<p>Oftentimes, you will have code that generates the figure, and then you want to insert the figure at a different point.
+This is accomplished by the judicious use of <code>echo</code> and <code>include</code> chunk options.</p>
+
+<p>For example, we can create a <code>ggplot2</code> figure and store it in a variable in one chunk, and then <code>print</code> it in a later
+chunk to actually insert it into the text body.</p>
+
+<pre><code class="r">plotData &lt;- data.frame(x = rnorm(1000, 1, 5), y = rnorm(1000, 0, 2))
+plotKeep &lt;- ggplot(plotData, aes(x = x, y = y)) + geom_point()
+figCounts &lt;- incCount(figCount, &quot;f.randomFigure&quot;)
+</code></pre>
+
+<p>And now we decide to actually insert it using <code>print(plotKeep)</code> with the option of <code>echo=FALSE</code>:</p>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk figureInsert"/> </p>
+
+<p><strong><a href="#f.randomFigure">Figure 1</a>. A random figure.</strong></p>
+
+<h2>Echo and Include</h2>
+
+<p>This brings up the issue of how to keep the code from appearing in the text body. I found depending on the particulars,
+either using <code>echo=FALSE</code> or <code>include=FALSE</code> would do the job. This is meant to be a paper, a reproducible one, but a 
+paper nonetheless, and therefore the code should not end up in the text body. </p>
+
+<h2>References</h2>
+
+<p>One thing I haven&#39;t done yet is convert all the references. I am planning to try using the <a href="https://github.com/cboettig/knitcitations/">knitcitations</a> package. I will probably post on that experience.</p>
+
+<h2>HTML generation</h2>
+
+<p>For generating a full <code>html</code> version of the paper, I change the default <code>RStudio</code> <code>markdown</code> render options like so:</p>
+
+<pre><code>htmlOptions &lt;- markdownHTMLOptions(defaults=TRUE)
+htmlOptions &lt;- htmlOptions[htmlOptions != &quot;hard_wrap&quot;]
+markdownToHTML(inputFile, outputFile, options = htmlOptions)
+</code></pre>
+
+<p>I do this because when I write my documents, I want the source to be readable online. If this is a <code>github</code> hosted repo,
+that means being displayed in the <code>github</code> file browser, which does not do line wrapping. So I set up a 120 character
+line in my editor, and try very hard to stick to that. </p>
+
+<h2>Function source</h2>
+
+<p>You can find the previously mentioned functions in a github gist <a href="https://gist.github.com/3858973">here</a>.</p>
+
+<h2>Post source</h2>
+
+<p>The source files for this blog post can be found at: <a href=""><code>Rmd</code></a>, <a href=""><code>md</code></a>, and <a href=""><code>html</code></a>.</p>
+
+<p>Posted on October 9, 2012, at </p>

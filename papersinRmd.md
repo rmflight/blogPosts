@@ -1,17 +1,10 @@
 # Writing papers using R Markdown
 
-```{r knitrSetup, include=FALSE}
-# sets output for inline results nicely
-#knit_hooks$set(inline = identity) 
 
-# kills knitr if there is an error, therefore we don't waste time generating error messages
-knit_hooks$set(error = function(x, options) stop(x)) 
-```
 
-```{r rsetup, include=FALSE}
-require(ggplot2)
 
-```
+
+
 
 I have been watching the activity in [`RStudio`](rstudio.org) and [`knitr`](http://yihui.name/knitr/) for a while, and
 have even been using `Rmd` (R markdown) files in my own work as a way to easily provide commentary on an actual dataset
@@ -40,17 +33,19 @@ you what I mean.
 
 ### Counting
 
-```{r counting}
-incCount <- function(inObj, useName){
-	nObj <- length(inObj)
-	useNum <- max(inObj) + 1
-	inObj <- c(inObj, useNum)
-	names(inObj)[nObj+1] <- useName
-	inObj
+
+```r
+incCount <- function(inObj, useName) {
+    nObj <- length(inObj)
+    useNum <- max(inObj) + 1
+    inObj <- c(inObj, useNum)
+    names(inObj)[nObj + 1] <- useName
+    inObj
 }
-figCount <- c("_"=0)
-tableCount <- c("_"=0)
+figCount <- c(`_` = 0)
+tableCount <- c(`_` = 0)
 ```
+
 
 The `incCount` function is very simple, it takes an object, checks the maximum count, and then adds an incremental value
 with the supplied name. In this example, I initialized the `figCount` and `tableCount` objects with a non-sensical named
@@ -60,33 +55,44 @@ Now in the process of writing, I decide I'm going to need a table on the amount 
 posts in different years of their post-doc training. Lets call this `t.blogPostDocs`. Notice that this is a fairly 
 descriptive name. We can assign it a number like so:
 
-```{r addTable}
+
+```r
 tableCount <- incCount(tableCount, "t.blogPostDocs")
 tableCount
 ```
+
+```
+##              _ t.blogPostDocs 
+##              0              1
+```
+
 
 ### Inserting
 
 So now we have a variable with a named number we can refer to. But how do we insert it into the text? We are going to
 use another function that will let us insert either the text with a link, or just the text itself.
 
-```{r pasteText}
-pasteLabel <- function(preText, inObj, objName, insLink=TRUE){
-	objNum <- inObj[objName]
-	
-	useText <- paste(preText, objNum, sep=" ")
-	if (insLink){
-		useText <- paste("[", useText, "](#", objName, ")", sep="")
-	}
-	useText
+
+```r
+pasteLabel <- function(preText, inObj, objName, insLink = TRUE) {
+    objNum <- inObj[objName]
+    
+    useText <- paste(preText, objNum, sep = " ")
+    if (insLink) {
+        useText <- paste("[", useText, "](#", objName, ")", sep = "")
+    }
+    useText
 }
 ```
 
+
 This function allows us to insert the table number like so:
 
-```{r insertTableText, eval=FALSE}
+
+```r
 r I(pasteLabel("Table", tableCount, "t.blogPostDocs"))
 ```
+
 
 This would be inserted into a normal `inline` code block. The `I` makes sure that the text will appear as normal text,
 and not get formatted as a code block. The default behavior is to insert as a relative link, thereby enabling the use
@@ -102,38 +108,66 @@ anchor link like so:
 Followed by the actual table text. This brings up the subject of `markdown` tables. I also wrote a function (thanks to
 Yihui again) that transforms a normal `R` `data.frame` to a `markdown` table.
 
-```{r tableFunction}
-tableCat <- function(inFrame){
-	outText <- paste(names(inFrame), collapse=" | ")
-	outText <- c(outText, paste(rep("---", ncol(inFrame)), collapse=" | "))
-	invisible(apply(inFrame, 1, function(inRow){
-		outText <<- c(outText, paste(inRow, collapse=" | "))
-	}))
-	return(outText)
+
+```r
+tableCat <- function(inFrame) {
+    outText <- paste(names(inFrame), collapse = " | ")
+    outText <- c(outText, paste(rep("---", ncol(inFrame)), collapse = " | "))
+    invisible(apply(inFrame, 1, function(inRow) {
+        outText <<- c(outText, paste(inRow, collapse = " | "))
+    }))
+    return(outText)
 }
 ```
 
+
 Lets see it in action.
 
-```{r tableExample}
-postDocBlogs <- data.frame(PD=c("p1", "p2", "p3"), NBlog=c(4, 10, 2), Year=c(1, 4, 2))
+
+```r
+postDocBlogs <- data.frame(PD = c("p1", "p2", "p3"), NBlog = c(4, 10, 2), Year = c(1, 
+    4, 2))
 postDocBlogs
+```
+
+```
+##   PD NBlog Year
+## 1 p1     4    1
+## 2 p2    10    4
+## 3 p3     2    2
+```
+
+```r
 
 postDocInsert <- tableCat(postDocBlogs)
 postDocInsert
 ```
 
+```
+## [1] "PD | NBlog | Year" "--- | --- | ---"   "p1 |  4 | 1"      
+## [4] "p2 | 10 | 4"       "p3 |  2 | 2"
+```
+
+
 To actually insert it into the text, use a code chunk with `results='asis'` and `echo=FALSE`. 
 
-```{r tableInsert, results='asis'}
-cat(postDocInsert, sep="\n")
+
+```r
+cat(postDocInsert, sep = "\n")
 ```
+
+PD | NBlog | Year
+--- | --- | ---
+p1 |  4 | 1
+p2 | 10 | 4
+p3 |  2 | 2
+
 
 Before inserting the table though, you might want an inline code with the table number and caption, like this:
 
 `I(pasteLabel("Table", tableCount, "t.blogPostDocs", FALSE))` This is the number of blog posts and year of training for post-docs.
 
-`r I(pasteLabel("Table", tableCount, "t.blogPostDocs", FALSE))` This is the number of blog posts and year of training for post-docs.
+Table 1 This is the number of blog posts and year of training for post-docs.
 
 Remember for captions to set the `insLink` variable to `FALSE` so that you don't generate a link from the caption.
 
@@ -145,19 +179,20 @@ This is accomplished by the judicious use of `echo` and `include` chunk options.
 For example, we can create a `ggplot2` figure and store it in a variable in one chunk, and then `print` it in a later
 chunk to actually insert it into the text body.
 
-```{r figureGeneration}
-plotData <- data.frame(x=rnorm(1000, 1, 5), y=rnorm(1000, 0, 2))
-plotKeep <- ggplot(plotData, aes(x=x, y=y)) + geom_point()
+
+```r
+plotData <- data.frame(x = rnorm(1000, 1, 5), y = rnorm(1000, 0, 2))
+plotKeep <- ggplot(plotData, aes(x = x, y = y)) + geom_point()
 figCounts <- incCount(figCount, "f.randomFigure")
 ```
 
+
 And now we decide to actually insert it using `print(plotKeep)` with the option of `echo=FALSE`:
 
-```{r figureInsert, echo=FALSE}
-print(plotKeep)
-```
+![plot of chunk figureInsert](figure/figureInsert.png) 
 
-**`r I(pasteLabel("Figure", figCounts, "f.randomFigure"))`. A random figure.**
+
+**[Figure 1](#f.randomFigure). A random figure.**
 
 ## Echo and Include
 
