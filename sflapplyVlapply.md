@@ -353,4 +353,4 @@ loaded via a namespace (and not attached):
 [5] stats4_2.15.0  stringr_0.6.1  tools_2.15.0  
 
 
-Posted on [Blogger](http://rflight.blogspot.com/2012/10/sflapply-vs-lapply.html). [Rmd](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.Rmd), [md](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.md)
+Posted on [Blogger](http://robertmflight.blogspot.com/2012/10/sflapply-vs-lapply-in-r.html). [Rmd](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.Rmd), [md](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.md)
