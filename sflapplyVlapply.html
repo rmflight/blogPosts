@@ -1,0 +1,307 @@
+<p>I&#39;ve been using the <code>snowfall</code> package for a while to enable parallel processing in <code>R</code> on my Windows machine, where I 
+have an 8 core processor. I discovered today that the function <code>sfLapply</code> will only work with with an object that has a 
+class of <code>list</code>. This is really important, because there are many things that are &ldquo;list-like&rdquo;, and are actually lists at 
+heart, but <code>sfLapply</code> probably won&#39;t like it.</p>
+
+<p>Lets whip up an example. </p>
+
+<pre><code class="r">require(snowfall)
+require(GenomicRanges)
+
+gr &lt;- GRanges(seqnames = Rle(c(&quot;chr1&quot;, &quot;chr2&quot;, &quot;chr1&quot;, &quot;chr3&quot;), c(1, 3, 2, 4)), 
+    ranges = IRanges(1:10, width = 10:1, names = head(letters, 10)), strand = Rle(strand(c(&quot;-&quot;, 
+        &quot;+&quot;, &quot;*&quot;, &quot;+&quot;, &quot;-&quot;)), c(1, 2, 2, 3, 2)), score = 1:10, GC = seq(1, 0, 
+        length = 10))
+
+gr
+</code></pre>
+
+<pre><code>## GRanges with 10 ranges and 2 elementMetadata cols:
+##     seqnames    ranges strand |     score                GC
+##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;         &lt;numeric&gt;
+##   a     chr1  [ 1, 10]      - |         1                 1
+##   b     chr2  [ 2, 10]      + |         2 0.888888888888889
+##   c     chr2  [ 3, 10]      + |         3 0.777777777777778
+##   d     chr2  [ 4, 10]      * |         4 0.666666666666667
+##   e     chr1  [ 5, 10]      * |         5 0.555555555555556
+##   f     chr1  [ 6, 10]      + |         6 0.444444444444444
+##   g     chr3  [ 7, 10]      + |         7 0.333333333333333
+##   h     chr3  [ 8, 10]      + |         8 0.222222222222222
+##   i     chr3  [ 9, 10]      - |         9 0.111111111111111
+##   j     chr3  [10, 10]      - |        10                 0
+##   ---
+##   seqlengths:
+##    chr1 chr2 chr3
+##      NA   NA   NA
+</code></pre>
+
+<pre><code class="r">
+class(gr)
+</code></pre>
+
+<pre><code>## [1] &quot;GRanges&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;GenomicRanges&quot;
+</code></pre>
+
+<pre><code class="r">
+grList &lt;- split(gr, seqnames(gr))
+grList
+</code></pre>
+
+<pre><code>## GRangesList of length 3:
+## $chr1 
+## GRanges with 3 ranges and 2 elementMetadata cols:
+##     seqnames    ranges strand |     score                GC
+##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;         &lt;numeric&gt;
+##   a     chr1   [1, 10]      - |         1                 1
+##   e     chr1   [5, 10]      * |         5 0.555555555555556
+##   f     chr1   [6, 10]      + |         6 0.444444444444444
+## 
+## $chr2 
+## GRanges with 3 ranges and 2 elementMetadata cols:
+##     seqnames  ranges strand | score                GC
+##   b     chr2 [2, 10]      + |     2 0.888888888888889
+##   c     chr2 [3, 10]      + |     3 0.777777777777778
+##   d     chr2 [4, 10]      * |     4 0.666666666666667
+## 
+## $chr3 
+## GRanges with 4 ranges and 2 elementMetadata cols:
+##     seqnames   ranges strand | score                GC
+##   g     chr3 [ 7, 10]      + |     7 0.333333333333333
+##   h     chr3 [ 8, 10]      + |     8 0.222222222222222
+##   i     chr3 [ 9, 10]      - |     9 0.111111111111111
+##   j     chr3 [10, 10]      - |    10                 0
+## 
+## ---
+## seqlengths:
+##  chr1 chr2 chr3
+##    NA   NA   NA
+</code></pre>
+
+<pre><code class="r">class(grList)
+</code></pre>
+
+<pre><code>## [1] &quot;GRangesList&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;GenomicRanges&quot;
+</code></pre>
+
+<p>So we have the <code>GRanges</code> object <code>gr</code>, and a <code>GRangesList</code> in <code>grList</code>. Now lets try to do some parallel execution of
+finding overlaps of itself.</p>
+
+<p>This is the function we will use in parallel:</p>
+
+<pre><code class="r">returnOverlaps &lt;- function(inObj1, inObj2) {
+    findOverlaps(inObj1, inObj2, type = &quot;any&quot;)
+}
+</code></pre>
+
+<pre><code class="r">sfInit(parallel = T, cpus = 2)
+</code></pre>
+
+<pre><code>## Warning: Unknown option on commandline: options(encoding
+</code></pre>
+
+<pre><code>## R Version:  R version 2.15.0 (2012-03-30)
+</code></pre>
+
+<pre><code>## snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2
+## CPUs.
+</code></pre>
+
+<pre><code class="r">sfLibrary(GenomicRanges)
+</code></pre>
+
+<pre><code>## Library GenomicRanges loaded.
+</code></pre>
+
+<pre><code>## Library GenomicRanges loaded in cluster.
+</code></pre>
+
+<pre><code>## Warning: &#39;keep.source&#39; is deprecated and will be ignored
+</code></pre>
+
+<pre><code class="r">
+overlap &lt;- sfLapply(grList, returnOverlaps, gr)
+</code></pre>
+
+<pre><code>## Error: 2 nodes produced errors; first error: no method for coercing this
+## S4 class to a vector
+</code></pre>
+
+<pre><code class="r">
+sfStop()
+</code></pre>
+
+<pre><code>## Stopping cluster
+</code></pre>
+
+<p>Ok, we get the error <code>no method for coercing this S4 class to a vector</code>. Seems kind of cryptic, at least it did to me.
+What about using normal <code>lapply</code>?</p>
+
+<pre><code class="r">overlap &lt;- lapply(grList, returnOverlaps, gr)
+
+overlap
+</code></pre>
+
+<pre><code>## $chr1
+## Hits of length 7
+## queryLength: 3
+## subjectLength: 10
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           1 
+##  2         1           5 
+##  3         2           1 
+##  4         2           5 
+##  5         2           6 
+##  6         3           5 
+##  7         3           6 
+## 
+## $chr2
+## Hits of length 9
+## queryLength: 3
+## subjectLength: 10
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           2 
+##  2         1           3 
+##  3         1           4 
+##  4         2           2 
+##  5         2           3 
+##  6         2           4 
+##  7         3           2 
+##  8         3           3 
+##  9         3           4 
+## 
+## $chr3
+## Hits of length 8
+## queryLength: 4
+## subjectLength: 10
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           7 
+##  2         1           8 
+##  3         2           7 
+##  4         2           8 
+##  5         3           9 
+##  6         3          10 
+##  7         4           9 
+##  8         4          10
+</code></pre>
+
+<p>This works without any errors. Odd. It was only when I was trying to get this to work using <code>llply</code> from the <code>plyr</code> 
+package that I saw a message about <code>as.default.list</code> or something like that. So maybe we have to convert the <code>grList</code> to 
+a good and proper <code>list</code> first?</p>
+
+<pre><code class="r">sfInit(parallel = T, cpus = 2)
+</code></pre>
+
+<pre><code>## Warning: Unknown option on commandline: options(encoding
+</code></pre>
+
+<pre><code>## snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2
+## CPUs.
+</code></pre>
+
+<pre><code class="r">sfLibrary(GenomicRanges)
+</code></pre>
+
+<pre><code>## Library GenomicRanges loaded.
+</code></pre>
+
+<pre><code>## Library GenomicRanges loaded in cluster.
+</code></pre>
+
+<pre><code>## Warning: &#39;keep.source&#39; is deprecated and will be ignored
+</code></pre>
+
+<pre><code class="r">
+grList &lt;- as.list(grList)
+overlap2 &lt;- sfLapply(grList, returnOverlaps, gr)
+
+sfStop()
+</code></pre>
+
+<pre><code>## Stopping cluster
+</code></pre>
+
+<pre><code class="r">
+overlap2
+</code></pre>
+
+<pre><code>## $chr1
+## Hits of length 7
+## queryLength: 3
+## subjectLength: 10
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           1 
+##  2         1           5 
+##  3         2           1 
+##  4         2           5 
+##  5         2           6 
+##  6         3           5 
+##  7         3           6 
+## 
+## $chr2
+## Hits of length 9
+## queryLength: 3
+## subjectLength: 10
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           2 
+##  2         1           3 
+##  3         1           4 
+##  4         2           2 
+##  5         2           3 
+##  6         2           4 
+##  7         3           2 
+##  8         3           3 
+##  9         3           4 
+## 
+## $chr3
+## Hits of length 8
+## queryLength: 4
+## subjectLength: 10
+##   queryHits subjectHits 
+##    &lt;integer&gt;   &lt;integer&gt; 
+##  1         1           7 
+##  2         1           8 
+##  3         2           7 
+##  4         2           8 
+##  5         3           9 
+##  6         3          10 
+##  7         4           9 
+##  8         4          10
+</code></pre>
+
+<p>It works! I&#39;m not exactly sure why there is this difference, but I thought perhaps I can save someone else a few hours
+time figuring it out.</p>
+
+<p>SessionInfo:</p>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<p>R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)</p>
+
+<p>locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252<br/>
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C<br/>
+[5] LC_TIME=English_United States.1252    </p>
+
+<p>attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     </p>
+
+<p>other attached packages:
+[1] GenomicRanges_1.8.13 IRanges_1.14.4       BiocGenerics_0.2.0<br/>
+[4] snowfall_1.84        snow_0.3-10          knitr_0.8.1         </p>
+
+<p>loaded via a namespace (and not attached):
+[1] digest_0.5.2   evaluate_0.4.2 formatR_0.6    plyr_1.7.1<br/>
+[5] stats4_2.15.0  stringr_0.6.1  tools_2.15.0  </p>
