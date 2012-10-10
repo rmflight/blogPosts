@@ -352,3 +352,5 @@ loaded via a namespace (and not attached):
 [1] digest_0.5.2   evaluate_0.4.2 formatR_0.6    plyr_1.7.1    
 [5] stats4_2.15.0  stringr_0.6.1  tools_2.15.0  
 
+
+Posted on [Blogger](http://rflight.blogspot.com/2012/10/sflapply-vs-lapply.html). [Rmd](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.Rmd), [md](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.md)

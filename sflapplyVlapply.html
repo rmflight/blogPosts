@@ -87,8 +87,7 @@ grList
 ## [1] &quot;GenomicRanges&quot;
 </code></pre>
 
-<p>So we have the <code>GRanges</code> object <code>gr</code>, and a <code>GRangesList</code> in <code>grList</code>. Now lets try to do some parallel execution of
-finding overlaps of itself.</p>
+<p>So we have the <code>GRanges</code> object <code>gr</code>, and a <code>GRangesList</code> in <code>grList</code>. Now lets try to do some parallel execution of finding overlaps of itself.</p>
 
 <p>This is the function we will use in parallel:</p>
 
@@ -137,8 +136,7 @@ sfStop()
 <pre><code>## Stopping cluster
 </code></pre>
 
-<p>Ok, we get the error <code>no method for coercing this S4 class to a vector</code>. Seems kind of cryptic, at least it did to me.
-What about using normal <code>lapply</code>?</p>
+<p>Ok, we get the error <code>no method for coercing this S4 class to a vector</code>. Seems kind of cryptic, at least it did to me. What about using normal <code>lapply</code>?</p>
 
 <pre><code class="r">overlap &lt;- lapply(grList, returnOverlaps, gr)
 
@@ -191,9 +189,8 @@ overlap
 ##  8         4          10
 </code></pre>
 
-<p>This works without any errors. Odd. It was only when I was trying to get this to work using <code>llply</code> from the <code>plyr</code> 
-package that I saw a message about <code>as.default.list</code> or something like that. So maybe we have to convert the <code>grList</code> to 
-a good and proper <code>list</code> first?</p>
+<p>This works without any errors. Odd. It was only when I was trying to get this to work using <code>llply</code> from the <code>plyr</code> package that I saw a message about <code>as.default.list</code> or something like that. 
+So maybe we have to convert the <code>grList</code> to a good and proper <code>list</code> first?</p>
 
 <pre><code class="r">sfInit(parallel = T, cpus = 2)
 </code></pre>
@@ -305,3 +302,5 @@ Platform: x86_64-pc-mingw32/x64 (64-bit)</p>
 <p>loaded via a namespace (and not attached):
 [1] digest_0.5.2   evaluate_0.4.2 formatR_0.6    plyr_1.7.1<br/>
 [5] stats4_2.15.0  stringr_0.6.1  tools_2.15.0  </p>
+
+<p>Posted on <a href="http://rflight.blogspot.com/2012/10/sflapply-vs-lapply.html">Blogger</a>. <a href="https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.Rmd">Rmd</a>, <a href="https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.md">md</a></p>

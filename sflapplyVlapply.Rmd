@@ -78,4 +78,4 @@ SessionInfo:
 sessionInfo()
 ```
 
-Posted to http://rflight.blogspot.com/2012/10/sflapply-vs-lapply.html. [Rmd]()
+Posted on [Blogger](http://rflight.blogspot.com/2012/10/sflapply-vs-lapply.html). [Rmd](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.Rmd), [md](https://github.com/rmflight/blogPosts/blob/master/sflapplyVlapply.md)
