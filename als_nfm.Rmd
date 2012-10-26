@@ -1,0 +1,10 @@
+# ALS vs NFM
+
+My PhD is in chemistry, not statistics or computer science. In analytical chemistry, there is a method known as `multivariate curve resolution via alternating least squares` (MCR-ALS), 
+that has been in use for quite some time, especially among those doing spectroscopy of mixtures. In this field it is 
+heavily used to separate a mixture spectrum into various pure component spectra, thus helping to determine what exactly
+is in a particular mixture. It is related to `principal components analysis` (PCA), however, there is no constraint 
+that the components be orthogonal, simply that they must be positive. 
+
+In statistics, there is a method known as `non-negative matrix factorization` (NMF). Recently, it has been discovered that
+the NMF calculations can be sped up quite a bit using ALS methods. 
