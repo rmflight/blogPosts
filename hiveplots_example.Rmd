@@ -1,0 +1,12 @@
+# Hive Plots using R and Cytoscape
+
+I found out about `HivePlots` this past summer, and although I thought they looked incredibly useful and awesome, I didn't
+have a personal use for them at the time, and therefore put off doing anything with them. That recently changed when I 
+encountered some particularly nasty hairballs of force-directed graphs. Unfortunately, the `HiveR` package does not
+create interactive hiveplots, and that is particularly important for me. I don't necessarily want to be able to compare
+networks, but I do want to be able to explore the networks that I create. For that reason I have been a big fan of the `RCytoscape` package since I encountered it.
+
+So I decided last week to see how hard it would be to generate a hive plot that could be visualized and interacted with in 
+Cytoscape. For this example I'm going to use the data in the `HiveR` package, and actually use the structures already 
+encoded, because they are useful.
+
