@@ -106,9 +106,32 @@ nodeData(hiveGraph, as.character(EC4$nodes$id), "nodeType") <- nodeTypes[as.char
 edgeDataDefaults(hiveGraph, "interactionType") <- ""
 attr(edgeDataDefaults(hiveGraph, "interactionType"), "class") <- "STRING"
 
-interactionType <- c(red="repressor", green="activator", dual="orange")
+interactionType <- c(red="repressor", green="activator", orange="dual")
 edgeData(hiveGraph, as.character(EC4$edges$id1), as.character(EC4$edges$id2), "interactionType") <- interactionType[EC4$edges$color]
 ```
+
+```{r r2cy}
+ccHive <- CytoscapeWindow("hiveTest", hiveGraph)
+displayGraph(ccHive)
+```
+
+Now lets move those nodes to their positions based on the Hive Graph calculations.
+
+```{r movePos}
+setNodePosition(ccHive, as.character(EC4$nodes$id), nodeXY[,1], nodeXY[,2])
+fitContent(ccHive)
+```
+
+And set the colors based on attributes:
+
+```{r setColors}
+nodeColors <- c("#FF0000", "#00FF00", "#0000FF") # red, green and blue
+edgeColors <- c("#FF0000", "#00FF00", "#FF5333") # red, green, and orange
+
+setNodeColorRule(ccHive, "nodeType", c("source", "man", "sink"), nodeColors, 'lookup')
+setEdgeColorRule(ccHive, "interactionType", c("repressor", "activator", "dual"), edgeColors, 'lookup')
+```
+
 
 
 
