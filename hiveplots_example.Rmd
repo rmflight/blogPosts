@@ -1,19 +1,28 @@
 # Hive Plots using R and Cytoscape
 
-I found out about `HivePlots` this past summer, and although I thought they looked incredibly useful and awesome, I didn't
-have a personal use for them at the time, and therefore put off doing anything with them. That recently changed when I 
-encountered some particularly nasty hairballs of force-directed graphs. Unfortunately, the `HiveR` package does not
-create interactive hiveplots, and that is particularly important for me. I don't necessarily want to be able to compare
-networks, but I do want to be able to explore the networks that I create. For that reason I have been a big fan of the `RCytoscape` package since I encountered it.
+```{r knitrSetup, include=FALSE}
+knit_hooks$set(error = function(x, options) stop(x)) 
+```
+
+## Hive Plots??
+
+I found out about [`HivePlots`](http://www.hiveplot.net/) this past summer, and although I thought they looked incredibly 
+useful and awesome, I didn't have a personal use for them at the time, and therefore put off doing anything with them. 
+That recently changed when I encountered some particularly nasty hairballs of force-directed graphs. Unfortunately, the 
+[`HiveR`](http://academic.depauw.edu/~hanson/HiveR/HiveR.html) package does not create interactive hiveplots (at least for 2D), and that is particularly important for me. I don't necessarily want to be able to compare networks (one of the selling points made by Martin Krzywinski), but I do want to be able to explore the networks that I create. For 
+that reason I have been a big fan of the [`RCytoscape`](http://db.systemsbiology.net:8080/cytoscape/RCytoscape/versions/current/index.html) `Bioconductor` package since I encountered it, as it allows me to easily create graphs in `R`, and then interactively and programmatically explore them in [`Cytoscape`](http://cytoscape.org)
 
 So I decided last week to see how hard it would be to generate a hive plot that could be visualized and interacted with in 
-Cytoscape. For this example I'm going to use the data in the `HiveR` package, and actually use the structures already 
+`Cytoscape`. For this example I'm going to use the data in the `HiveR` package, and actually use the structures already 
 encoded, because they are useful.
 
-```{r loadPackages}
+## Load Data
+
+```{r loadPackages, warning=FALSE}
 require(RCytoscape)
 require(HiveR)
 require(graph)
+options(stringsAsFactors=F)
 ```
 
 ```{r getData}
@@ -26,28 +35,35 @@ EC1 <- dot2HPD(file = file.path(dataDir, "E_coli_TF.dot"),
 str(EC1)
 ```
 
+## Process Data
+
 So here we have the data. The `nodes` is a data frame with the `id`, a `label` describing the node, which `axis` the node 
 belongs on, and its `radius`, or how far out on the axis the node should be, as well as a `size`. These are all modifiable
 attributes that can be changed depending on how one wants to map different pieces of data. This of course is the beauty of
 hive plots, because they result in networks that are dependent on attributes that the user decides on.
 
-In this case, we have a transcription factor regulation network. 
+In this case, we have a transcription factor regulation network. I am going to point you to the previous links as to why
+a normal force-directed network diagram is not really that informative for these types of networks. I'm not out to 
+convince you that `HivePlots` are useful, if you don't get it from the publication and examples, then you should stop
+here. This is more about how to do some calculations to lay them out and work with them in `Cytoscape`.
 
-Bryan has implemented some nice functions to work with this type of network and make rational calculations of the location on the axis and assignment to axes. For example, it is easy to locate nodes on an axis based on the total number of edges.
+Bryan has implemented some nice functions to work with this type of network and perform simple calculations to assign
+axes and locations based on properties of the nodes. For example, it is easy to locate nodes on an axis based on the total number of edges.
 
 ```{r modifyEC}
 EC2 <- mineHPD(EC1, option = "rad <- tot.edge.count")
 sumHPD(EC2)
 ```
 
-And then to assign the axis to be plotted on based on the whether edges are incoming (sink), outgoing (source), or both (manager).
+And then to assign the axis to be plotted on based on the whether edges are incoming (sink), outgoing (source), or both (manager). These are the types of decisions that influence whether you get anything insightful or useful out of a 
+`HivePlot`, and changing these options can of course change the conclusions you will make on a particular network.
 
 ```{r modifyAxis}
 EC3 <- mineHPD(EC2, option = "axis <- source.man.sink")
 sumHPD(EC3)
 ```
 
-We remove any nodes that have zero edges.
+We also remove any nodes that have zero edges.
 
 ```{r removeZero}
 EC4 <- mineHPD(EC3, option = "remove zero edge")
@@ -65,7 +81,7 @@ EC4$edges <- edges
 EC4$edges$weight = 0.5
 ```
 
-## Plot in Cytoscape
+## Calculate Node Locations
 
 In this case we have three axes, so we are going to calculate the axes locations as 0, 120, and 240 degrees. However, we
 need to use radians, because the conversion from spherical to cartesian coordinates involves using cosine and sine, which 
@@ -82,8 +98,10 @@ tmpDat <- EC4$nodes[, c("id", "axis", "radius")]
 tmpDat$radius <- tmpDat$radius * 3 # bump it up as cytoscape coordinates are small
 tmpDat$phi <- ((tmpDat$axis - 1) * 120) * (pi / 180)
 
-nodeXY <- r2xy(tmpDat$radius, tmpDat$phi)
+nodeXY <- r2xy(tmpDat$radius, tmpDat$phi) # contains cartesian coordinates
 ```
+
+## Create GraphNEL
 
 Initialize the graph with the nodes and the edges.
 
@@ -110,6 +128,8 @@ interactionType <- c(red="repressor", green="activator", orange="dual")
 edgeData(hiveGraph, as.character(EC4$edges$id1), as.character(EC4$edges$id2), "interactionType") <- interactionType[EC4$edges$color]
 ```
 
+## Transfer to Cytoscape
+
 ```{r r2cy}
 ccHive <- CytoscapeWindow("hiveTest", hiveGraph)
 displayGraph(ccHive)
@@ -126,12 +146,21 @@ setDefaultNodeSize(ccHive, 5)
 And set the colors based on attributes:
 
 ```{r setColors}
-nodeColors <- c("#FF0000", "#00FF00", "#0000FF") # red, green and blue
-edgeColors <- c("#FF0000", "#00FF00", "#FF5333") # red, green, and orange
+nodeColors <- hcl(h=c(0, 120, 240), c=55, l=45) # darker for the nodes
+edgeColors <- hcl(h=c(0, 120, 60), c=45, l=75) # lighter for the edges
 
 setNodeColorRule(ccHive, "nodeType", c("source", "man", "sink"), nodeColors, 'lookup')
+setNodeBorderColorRule(ccHive, "nodeType", c("source", "man", "sink"), nodeColors, 'lookup')
 setEdgeColorRule(ccHive, "interactionType", c("repressor", "activator", "dual"), edgeColors, 'lookup')
+setNodeFontSizeDirect(ccHive, as.character(EC4$nodes$id), 0)
 ```
+
+```{r saveNonScaleImage}
+fitContent(ccHive)
+saveImage(ccHive, file.path(getwd(), "nonScaled.png"), "PNG")
+```
+
+![nonScaled](nonScaled.png)
 
 This view doesn't help us a whole lot, unfortunately. What if we normalize the radii for each axis to use a maximum value
 of 100?
@@ -155,6 +184,41 @@ setNodePosition(ccHive, as.character(EC4$nodes$id), nodeXY[,1], nodeXY[,2])
 fitContent(ccHive)
 ```
 
+```{r saveScaled}
+fitContent(ccHive)
+saveImage(ccHive, file.path(getwd(), "scaledAxes.png"), "PNG")
+```
 
+![scaledAxes](scaledAxes.png)
 
+This looks pretty awesome! And I can zoom in on it, and examine it, and look at various properties! And I get the full 
+scripting power of `R` if I want to do anything else with, such as select sets of edges or nodes and then query who is 
+attached to whom. 
 
+## Disadvantages
+
+We don't get the **arced** edges. This kind of sucks, but from what little I have done with these, that actually is not that
+big a deal. Would be cool if there was a way to do that, however. I do see that the web version of Cytoscape does allow
+you to set a value for how much "arcness" you want on an edge. 
+
+This does mean that any plot with only two axes would need special consideration. Instead of doing two axes end to end 
+(using 180 deg), it might be better to make them parallel to each other.
+
+With more than three axes, line crossings may become a problem. In that case, it may be worth looking to see if there are
+ways to tell Cytoscape in what order to draw edges. I don't know if that is possible using the XMLRPC pipe that is used
+by RCy.
+
+## RCy Tip
+
+If you want to know how the image will look when saving a network to an image, use `showGraphicsDetails(obj, TRUE)`.
+
+```{r cleanup}
+deleteWindow(ccHive)
+```
+
+## Session Info
+
+```{r}
+Sys.time()
+sessionInfo()
+```
