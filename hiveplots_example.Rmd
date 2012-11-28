@@ -10,3 +10,85 @@ So I decided last week to see how hard it would be to generate a hive plot that 
 Cytoscape. For this example I'm going to use the data in the `HiveR` package, and actually use the structures already 
 encoded, because they are useful.
 
+```{r loadPackages}
+require(RCytoscape)
+require(HiveR)
+require(graph)
+```
+
+```{r getData}
+dataDir <- file.path(system.file("extdata", package = "HiveR"), "E_coli")
+EC1 <- dot2HPD(file = file.path(dataDir, "E_coli_TF.dot"),
+	node.inst = NULL,
+	edge.inst = file.path(dataDir, "EdgeInst_TF.csv"),
+	desc = "E coli gene regulatory network (RegulonDB)",
+	axis.cols = rep("grey", 3))
+str(EC1)
+```
+
+So here we have the data. The `nodes` is a data frame with the `id`, a `label` describing the node, which `axis` the node 
+belongs on, and its `radius`, or how far out on the axis the node should be, as well as a `size`. These are all modifiable
+attributes that can be changed depending on how one wants to map different pieces of data. This of course is the beauty of
+hive plots, because they result in networks that are dependent on attributes that the user decides on.
+
+In this case, we have a transcription factor regulation network. 
+
+Bryan has implemented some nice functions to work with this type of network and make rational calculations of the location on the axis and assignment to axes. For example, it is easy to locate nodes on an axis based on the total number of edges.
+
+```{r modifyEC}
+EC2 <- mineHPD(EC1, option = "rad <- tot.edge.count")
+sumHPD(EC2)
+```
+
+And then to assign the axis to be plotted on based on the whether edges are incoming (sink), outgoing (source), or both (manager).
+
+```{r modifyAxis}
+EC3 <- mineHPD(EC2, option = "axis <- source.man.sink")
+sumHPD(EC3)
+```
+
+We remove any nodes that have zero edges.
+
+```{r removeZero}
+EC4 <- mineHPD(EC3, option = "remove zero edge")
+```
+
+And finally re-order the edges (not sure how this would affect plotting using Cytoscape).
+
+```{r reorderEdges}
+edges <- EC4$edges
+edgesR <- subset(edges, color == "red")
+edgesG <- subset(edges, color == "green")
+edgesO <- subset(edges, color == "orange")
+edges <- rbind(edgesO, edgesG, edgesR)
+EC4$edges <- edges
+EC4$edges$weight = 0.5
+```
+
+## Plot in Cytoscape
+
+In this case we have three axes, so we are going to calculate the axes locations as 0, 120, and 240 degrees. However, we
+need to use radians, because the conversion from spherical to cartesian coordinates involves using cosine and sine, which 
+in `R` is based on radians.
+
+```{r radius2xy}
+r2xy <- function(inRad, inPhi){
+	x <- inRad * sin(inPhi)
+	y <- inRad * cos(inPhi)
+	cbind(x,y)
+}
+
+tmpDat <- EC4$nodes[, c("id", "axis", "radius")]
+tmpDat$radius <- tmpDat$radius * 3 # bump it up as cytoscape coordinates are small
+tmpDat$phi <- ((tmpDat$axis - 1) * 120) * (pi / 180)
+
+nodeXY <- r2xy(tmpDat$radius, tmpDat$phi)
+```
+
+```{r cytoGraph}
+hiveGraph <- new("graphNEL", nodes=as.character(EC4$nodes$id), edgemode="directed")
+hiveGraph <- addEdge(as.character(EC4$edges$id1), as.character(EC4$edges$id2), hiveGraph)
+
+nodeDataDefaults(hiveGraph, "group") <- ""
+attr(nodeDataDefaults(hiveGraph, "group"), "class") <- "STRING"
+```
