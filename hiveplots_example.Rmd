@@ -85,10 +85,31 @@ tmpDat$phi <- ((tmpDat$axis - 1) * 120) * (pi / 180)
 nodeXY <- r2xy(tmpDat$radius, tmpDat$phi)
 ```
 
-```{r cytoGraph}
+Initialize the graph with the nodes and the edges.
+
+```{r cytoGraphInit}
 hiveGraph <- new("graphNEL", nodes=as.character(EC4$nodes$id), edgemode="directed")
 hiveGraph <- addEdge(as.character(EC4$edges$id1), as.character(EC4$edges$id2), hiveGraph)
-
-nodeDataDefaults(hiveGraph, "group") <- ""
-attr(nodeDataDefaults(hiveGraph, "group"), "class") <- "STRING"
 ```
+
+We also want to put information we know about the nodes and edges in the graph, so that we can modify colors and stuff
+based on those attributes. For example, in this case we might want to modify the node color based on the axis it is on.
+Using attributes means we are not stuck using the colors that we previously assigned.
+
+```{r graphAtts}
+nodeDataDefaults(hiveGraph, "nodeType") <- ""
+attr(nodeDataDefaults(hiveGraph, "nodeType"), "class") <- "STRING"
+
+nodeTypes <- c("1"="source", "2"="man", "3"="sink")
+nodeData(hiveGraph, as.character(EC4$nodes$id), "nodeType") <- nodeTypes[as.character(EC4$nodes$axis)]
+
+edgeDataDefaults(hiveGraph, "interactionType") <- ""
+attr(edgeDataDefaults(hiveGraph, "interactionType"), "class") <- "STRING"
+
+interactionType <- c(red="repressor", green="activator", dual="orange")
+edgeData(hiveGraph, as.character(EC4$edges$id1), as.character(EC4$edges$id2), "interactionType") <- interactionType[EC4$edges$color]
+```
+
+
+
+
