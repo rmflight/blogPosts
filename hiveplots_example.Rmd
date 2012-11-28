@@ -120,6 +120,7 @@ Now lets move those nodes to their positions based on the Hive Graph calculation
 ```{r movePos}
 setNodePosition(ccHive, as.character(EC4$nodes$id), nodeXY[,1], nodeXY[,2])
 fitContent(ccHive)
+setDefaultNodeSize(ccHive, 5)
 ```
 
 And set the colors based on attributes:
@@ -132,6 +133,27 @@ setNodeColorRule(ccHive, "nodeType", c("source", "man", "sink"), nodeColors, 'lo
 setEdgeColorRule(ccHive, "interactionType", c("repressor", "activator", "dual"), edgeColors, 'lookup')
 ```
 
+This view doesn't help us a whole lot, unfortunately. What if we normalize the radii for each axis to use a maximum value
+of 100?
+
+```{r normUnits}
+useMax <- 100
+invisible(sapply(c(1, 2, 3), function(inAxis){
+	isCurr <- EC4$nodes$axis == inAxis
+	currMax <- max(EC4$nodes$radius[isCurr])
+	scaleFact <- useMax / currMax
+	EC4$nodes$radius[isCurr] <<- EC4$nodes$radius[isCurr] * scaleFact
+}))
+
+tmpDat <- EC4$nodes[, c("id", "axis", "radius")]
+tmpDat$radius <- tmpDat$radius * 3 # bump it up as cytoscape coordinates are small
+tmpDat$phi <- ((tmpDat$axis - 1) * 120) * (pi / 180)
+
+nodeXY <- r2xy(tmpDat$radius, tmpDat$phi)
+
+setNodePosition(ccHive, as.character(EC4$nodes$id), nodeXY[,1], nodeXY[,2])
+fitContent(ccHive)
+```
 
 
 
