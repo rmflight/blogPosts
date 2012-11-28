@@ -18,7 +18,7 @@ encoded, because they are useful.
 
 ## Load Data
 
-```{r loadPackages, warning=FALSE}
+```{r loadPackages, warning=FALSE, message=FALSE}
 require(RCytoscape)
 require(HiveR)
 require(graph)
@@ -153,6 +153,7 @@ setNodeColorRule(ccHive, "nodeType", c("source", "man", "sink"), nodeColors, 'lo
 setNodeBorderColorRule(ccHive, "nodeType", c("source", "man", "sink"), nodeColors, 'lookup')
 setEdgeColorRule(ccHive, "interactionType", c("repressor", "activator", "dual"), edgeColors, 'lookup')
 setNodeFontSizeDirect(ccHive, as.character(EC4$nodes$id), 0)
+redraw(ccHive)
 ```
 
 ```{r saveNonScaleImage}
@@ -182,6 +183,7 @@ nodeXY <- r2xy(tmpDat$radius, tmpDat$phi)
 
 setNodePosition(ccHive, as.character(EC4$nodes$id), nodeXY[,1], nodeXY[,2])
 fitContent(ccHive)
+redraw(ccHive)
 ```
 
 ```{r saveScaled}
@@ -211,6 +213,10 @@ by RCy.
 ## RCy Tip
 
 If you want to know how the image will look when saving a network to an image, use `showGraphicsDetails(obj, TRUE)`.
+
+## Other Visualizations
+
+Of course, I had just wrapped my head around using HivePlots in my own work, when I encountered ISBs [`BioFabric`](http://www.biofabric.org/). Given how they are representing this, could we find a way to draw this in Cytoscape??
 
 ```{r cleanup}
 deleteWindow(ccHive)
