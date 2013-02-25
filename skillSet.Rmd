@@ -16,4 +16,18 @@ Hard work in my senior research project led to work on my Masters degree, still 
 
 ## PhD
 
-I originally wanted to continue working in the same area for my PhD, but the one professor I really wanted to work for could only take on students who had fellowships. However, [Dalhousie University](dalLink) would have days when they invited prospective students to hear presentations from Faculty on their research, and provide times to meet with those faculty. [Peter Wentzell](pdWentzellLink) had had one PhD student who got him into incorporating errors into DNA Microarray analysis, and he was looking for someone to continue that. For me, it still involved chemistry, computers, and biology, so I was game. Those 5 years of my PhD are where I truly became familiar with statistics, error analysis, DNA microarrays from a physical and analytical chemistry perspective (and everything related, *e.g.* ontologies, TF analysis, etc), and programming, especially in Matlab.
+I originally wanted to continue working in the same area for my PhD, but the one professor I really wanted to work for could only take on students who had fellowships. However, the Chemistry Department at [Dalhousie University](dalLink) would have days when they invited prospective students to hear presentations from Faculty on their research, and provide times to meet with those faculty. [Peter Wentzell](pdWentzellLink) had had one PhD student who got him into incorporating errors into DNA Microarray analysis, and he was looking for someone to continue that. For me, it still involved chemistry, computers, and biology, so I was game. Those 5 years of my PhD are where I truly became familiar with statistics, error analysis, DNA microarrays from a physical and analytical chemistry perspective (and everything related, *e.g.* ontologies, TF analysis, etc), and programming, especially in Matlab.
+
+## PostDoc
+
+### Rouchka
+
+When I started looking for a PostDoc position, most job postings related to **Bioinformatics** seemed to be around sequence analysis. I finally saw Dr. Rouchka's posting that had DNA microarrays, and other related things. I was intrigued by the types of things they seemed to be doing, and the potential collaborations, so I started at UofL in Feb, 2010.
+
+At that time I made a conscious decision to dump `Matlab`, and learn `R`, because it has become essentially the *lingua franca* for bioinformatics, especially thanks to **[Bioconductor](biocLink)**. As I became familiar with our Lab's collaborators, my goal became to write utilities (whether scripts, simple analyses, full applications) to help them find answers to their questions, and show them that some things are possible that you never imagined without computers. 
+
+### Moseley
+
+Over 2.5 years with Eric Rouchka, I was always looking for opportunities to combine -omics analyses. This never really materialized, but I always tried to maintain good ties with other people doing -omics / -informatics at UofL. Their is a large group of those people at UofL, and Nigel Cooper and Eric Rouchka had roped together a series of informal weekly "Journal Club" meetings. Hunter Moseley from Chemistry regularly attended, and when some funding became available, he offered me a position in his lab. As this meant a chance to learn more metabolomics, and possibly combine transcriptomics and metabolomics, I jumped at the opportunity, even though it is another PostDoc. 
+
+Finally, after 2 months in the Moseley lab, I feel like I'm starting to settle in. It is a large eclectic mix of people from Chemistry, CS, Biology, undergraduate and graduate, but it is good to be talking chemistry again. I think I will make good use of my current skill set, and get to expand it while I am here.
