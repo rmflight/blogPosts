@@ -1,0 +1,4 @@
+# Skill Set
+
+At the beginning of the year I switched from a primarily transcriptomics bioinformatics lab (with [Dr. Eric Rouchka](Link)) in Computer Engineering and Computer Science to a primarily metabolomics bioinformatics lab (with [Dr. Hunter Moseley](Link)), in Chemistry. Over the past couple of months, I have had opportunity to reflect on the particular skills that I have acquired over my academic career, and why they seem particularly good for bioinformatics. In this post I want to lay out a little bit of chronological history of my academic career and the bits of training that I have recieved that seem to make me well rounded and a good fit for bioinformatics research.
+
