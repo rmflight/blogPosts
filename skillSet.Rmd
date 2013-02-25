@@ -1,4 +1,19 @@
 # Skill Set
 
+## Introduction
+
 At the beginning of the year I switched from a primarily transcriptomics bioinformatics lab (with [Dr. Eric Rouchka](Link)) in Computer Engineering and Computer Science to a primarily metabolomics bioinformatics lab (with [Dr. Hunter Moseley](Link)), in Chemistry. Over the past couple of months, I have had opportunity to reflect on the particular skills that I have acquired over my academic career, and why they seem particularly good for bioinformatics. In this post I want to lay out a little bit of chronological history of my academic career and the bits of training that I have recieved that seem to make me well rounded and a good fit for bioinformatics research.
 
+## Undergrad
+
+When I started my undergraduate training at the [University of New Brunswick](unbLink), I wanted to do medical school, and get a PhD to do research. The MCAT taught me that I was probably not cut out for Med School, so I concentrated on research. I ended up in the combined Biology-Chemistry program, because I didn't like a lot of the pure biology offered, nor a lot of the pure chemistry, but the intersection seemed to be very interesting. Unfortunately, many of the "biochemistry" classes were taught by one professor, with whom I got on his wrong side in my 3rd year, and I ended up doing a lot more chemistry courses than I would have otherwise. This meant that I got a fairly solid background in basic biology, genetics, biochemistry, molecular biology, even virology, **and** physical chemistry, analytical chemistry (took the labs as well), and I even did an NMR course my 4th year. 
+
+Thanks to my chemistry, I did a summer internship with one professor, that led to a senior research project with another. Initially I was interested in an NMR related research project, but this professor also had an interest in computer aided drug design (CADD). Before this, I did not know that people were combining physical chemistry, biochemistry, protein structure, and organic chemistry with computers. I was good with computers, and loved biology, so I worked on finding better ways to look at Acetylcholinesterase inhibitors. 
+
+## Masters
+
+Hard work in my senior research project led to work on my Masters degree, still in Chemistry. At this point, I was simply handy with computers, and the most exposure I got to programming was simple shell scripts to submit multiple computer docking jobs, I was still point and click. I also audited an intro to **C** programming course the second year of my MSc. 
+
+## PhD
+
+I originally wanted to continue working in the same area for my PhD, but the one professor I really wanted to work for could only take on students who had fellowships. However, [Dalhousie University](dalLink) would have days when they invited prospective students to hear presentations from Faculty on their research, and provide times to meet with those faculty. [Peter Wentzell](pdWentzellLink) had had one PhD student who got him into incorporating errors into DNA Microarray analysis, and he was looking for someone to continue that. For me, it still involved chemistry, computers, and biology, so I was game. Those 5 years of my PhD are where I truly became familiar with statistics, error analysis, DNA microarrays from a physical and analytical chemistry perspective (and everything related, *e.g.* ontologies, TF analysis, etc), and programming, especially in Matlab.
