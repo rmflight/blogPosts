@@ -1,0 +1,36 @@
+<h1>Writing up scientific results and literate programming</h1>
+
+<p>As an academic researcher, my primary purpose is to find some new insight, and subsequently communicate this insight to the general public. The process of doing this is traditionally thought to be:</p>
+
+<ol>
+<li>from observations of the world, generate a hypothesis</li>
+<li>design experiments to test hypothesis</li>
+<li>analyse results of the experiments to determine if hypothesis correct</li>
+<li>write report to communicate results to others (academics and / or general public)</li>
+</ol>
+
+<p>And then repeat.</p>
+
+<p>This is the way people envision it happening. And I would imagine that in some rare cases, this is what actually happens. However, I think many researchers would agree that this is not what normally happens. In the process of doing steps <strong>3</strong> and <strong>4</strong>, your hypothesis in <strong>1</strong> will be modified, which modifies the experiments in <strong>2</strong>, and so on and so forth. This makes the process of scientific discovery a very iterative process, often times right up to the report writing. </p>
+
+<p>For some of this, it takes a long time to figure this out. I&#39;ll never forget a professor during my PhD who suggested that you write the paper, and then figure out what experiments you should do to generate the results that would support or disprove the hypothesis you made in the paper. At the time I thought he was nuts, but when you start writing stuff, and looking at how all the steps of experiment and reporting can become intertwined, it doesn&#39;t seem like a bad idea. <a href="#note1">note1</a></p>
+
+<h2>Literate programming</h2>
+
+<p>What does this have to do with <a href="http://en.wikipedia.org/wiki/Literate_programming"><code>literate programming</code></a>? For those who don&#39;t know, <code>literate programming</code> is a way to mix code and prose together in one document (in <code>R</code> we use <code>knitr</code> &amp; <code>sweave</code>, <code>python</code> now has the <code>iPython</code> notebook as an option). This <code>literate programming</code> paradigm (combined with <code>markdown</code> as the markup language instead of <code>latex</code> thanks to <code>knitr</code>) is changing how I actually write my papers and do research in general. </p>
+
+<h2>How that changes writing</h2>
+
+<p>As I&#39;ve previously described <a href="http://robertmflight.blogspot.com/2012/10/writing-papers-using-r-markdown.html">1</a><a href="http://robertmflight.blogspot.com/2012/08/loving-markdown.html">2</a>, <a href="http://rstudio.org"><code>RStudio</code></a> makes the use of <code>knitr</code> and generation of literate documents using computations in <code>R</code> incredibly easy. Because my writing environment and programming environment are tightly coupled together, I can easily start writing what looks like a shareable, readable publication as soon as I start writing code. Couple this together with a CVS like <code>git</code>, and you have a way to follow the complete providence of a publication from start to finish.</p>
+
+<p>Instead of commenting my code to explain <strong>why</strong> I am doing something, I explain what I am doing in the prose, and then write the code to carry out that analysis. This changes my writing and coding style, and makes the interplay among the steps of writing scientific reports above much more explicit. I think it is a good thing, and will hopefully make my writing and research more productive.</p>
+
+<h3>Notes</h3>
+
+<p><a name="note1">1.</a> I am not suggesting that one only do experiments that will support the experiment, but writing out the paper at least gives you a framework for doing the experiments, and doing initial analysis. One should always be willing to modify the publication / hypothesis based on what the experiments tell you.</p>
+
+<h3>Sources</h3>
+
+<p>Published 10.05.13 <a href="http://robertmflight.blogspot.com/scientific-writing.html">here</a></p>
+
+<p>The source markdown for this document is available <a href="https://github.com/rmflight/blogPosts/blob/master/writing_up_results.md">here</a></p>
