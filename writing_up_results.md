@@ -1,4 +1,4 @@
-# Writing up scientific results `literate programming`
+# Writing up scientific results and literate programming
 
 As an academic researcher, my primary purpose is to find some new insight, and subsequently communicate this insight to the general public. The process of doing this is traditionally thought to be:
 
@@ -13,7 +13,7 @@ This is the way people envision it happening. And I would imagine that in some r
 
 For some of this, it takes a long time to figure this out. I'll never forget a professor during my PhD who suggested that you write the paper, and then figure out what experiments you should do to generate the results that would support or disprove the hypothesis you made in the paper. At the time I thought he was nuts, but when you start writing stuff, and looking at how all the steps of experiment and reporting can become intertwined, it doesn't seem like a bad idea. <font size="3"><a href="note1">note1</a></font>
 
-# `literate programming`
+# Literate programming
 
 What does this have to do with `literate programming`? For those who don't know, `literate programming` is a way to mix code and prose together in one document (in `R` we use `knitr` & `sweave`, `python` now has the `iPython` notebook as an option). This `literate programming` paradigm (combined with `markdown` as the markup language instead of `latex` thanks to `knitr`) is changing how I actually write my papers and do research in general. 
 
