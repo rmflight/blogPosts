@@ -27,3 +27,9 @@ Instead of commenting my code to explain **why** I am doing something, I explain
 ### Notes
 
   1. I am not suggesting that one only do experiments that will support the experiment, but writing out the paper at least gives you a framework for doing the experiments, and doing initial analysis. One should always be willing to modify the publication / hypothesis based on what the experiments tell you.
+
+### Sources
+
+Published 10.05.13 [here](http://robertmflight.blogspot.com/scientific-writing.html)
+
+The source markdown for this document is available [here](https://github.com/rmflight/blogPosts/blob/master/writing_up_results.md)
