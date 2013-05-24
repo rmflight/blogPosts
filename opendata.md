@@ -2,4 +2,4 @@
 
 Do you want to cure disease? Do you want scientists to have access to the data they need to cure diseases? If you answered yes to these questions, then you should be concerned about scientific publications and copyright.
 
-I have been following the open access movement for the past few years (as I'm sure many of you have), and I am convinced that research results should be accessible to everyone to read, even if it is not necessarily immediately (although the sooner the better)
+I have been following the open access movement for the past few years (as I'm sure many of you have), and I am convinced that research results should be accessible to everyone to read, even if it is not necessarily immediately (although the sooner the better). Of course, someone needs to pay for that to happen, the research output have to be hosted somewhere, and there has to be certainty that it will be there for a long time, etc, etc, etc.
