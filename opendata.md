@@ -8,4 +8,4 @@ However, I have also been following publications in machine learning that attemp
 
 Now, there are a couple of companies that are working to mine the literature. XCompany has PhDs read the literature and add to a database, while YCompany uses machine learning methods to populate their database. Both companies I would imagine pay for access to the various publisher full-texts, and subsequently offer their software to others at a price. 
 
-However, is this the way scientific research should work? Should it cost an individual money to be granted text-mining rights to research that is available to any one else to read? What if text-mining rights became available to 
+However, is this the way scientific research should work? Should it cost an individual money to be granted text-mining rights to research that is available to any one else to read? What if instead of our current situation, anyone could read **or** text-mine the literature, and build tools and services upon it.
