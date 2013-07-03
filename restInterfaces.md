@@ -10,3 +10,4 @@ This would also allow one to **play** with the tool in the web-interface, and th
 
 ## How many REST interfaces
 
+Based on the above, I wanted to attempt to determine how many of the articles describe a web-interface that also has a REST interface. Note, I am not keeping the text, and only querying the **abstract** and **article** sections of the articles. 
