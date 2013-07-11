@@ -31,4 +31,4 @@ This infrastructure supplies an interactive back and forth between editor and ex
 
 In addition, RStudio has git integration baked in, so it becomes easy to get started with some basic version control.
 
-Finally, RStudio is cross-platform, and free.
+Finally, RStudio is cross-platform, has tab completion among other standard IDE goodies, and its free.
