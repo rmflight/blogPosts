@@ -1,0 +1,13 @@
+# R Interface for Teaching
+
+
+[Kaitlin Thaney](https://twitter.com/intent/user?screen_name=kaythaney&tw_i=354635159447941120&tw_p=tweetembed) asked on Twitter last week about using [Ramnath Vaidyanathan's](https://twitter.com/intent/user?screen_name=ramnath_vaidya&tw_i=354599459868508160&tw_p=tweetembed) new `interactive R notebook` [1](http://ramnathv.github.io/rNotebook/) [2](https://github.com/ramnathv/rNotebook) for teaching.
+
+<blockquote class="twitter-tweet"><p>Liking the look of interactive R notebook by <a href="https://twitter.com/ramnath_vaidya">@ramnath_vaidya</a>. Any success stories in using to teach? <a href="http://t.co/wmVuFM2Rst">http://t.co/wmVuFM2Rst</a> (HT <a href="https://twitter.com/_inundata">@_inundata</a>)</p>&mdash; Kaitlin Thaney (@kaythaney) <a href="https://twitter.com/kaythaney/statuses/354635159447941120">July 9, 2013</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Now, to be clear up front, I am **not** trying to be mean to Ramnath, discredit his work, or the effort that went into that project. I think it is really cool, and has some rather interesting potential applications, but I don't really think it is the right interface for teaching `R`. Keep reading to find out why.
+
+## iPython Notebook
+
+First, I believe Ramnath when he says he was inspired by the [`iPython Notebook`](http://ipython.org/notebook.html) that makes it so very nice to do interactive, reproducible Python coding. Software Carpentry 
