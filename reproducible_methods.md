@@ -37,4 +37,4 @@ I know there has been discussion on this before, and disagreement, especially wi
 I also think we as a community should do more to point out the problem. i.e. when we see it, point it out to others. I've done that here, but I don't know how much should be formal. Maybe we need a new hashtag, #badbioinfomethodsection, and point links to papers that do this. Conversely, we should also point to examples when it is done right (#goodbioinfomethodsection??), and if you are bioinformatician or biologist who does a lot of coding, share your code, and at least supply it as supplemental materials. Oh, and maybe take a [SoftwareCarpentry](http://softwarecarpentry.org) class, and look up [git](http://git-scm.com/).
 
 
-Posted on http://robertmflight.blogspot.com/
+Posted on August 16, 2013 at http://robertmflight.blogspot.com/2013/08/reproducible-methods-or-bad.html, raw markdown at https://github.com/rmflight/blogPosts/blob/master/reproducible_methods.md
