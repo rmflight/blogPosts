@@ -1,0 +1,16 @@
+# Reproducible Methods
+
+Science is built on the whole idea of being able to reproduce results, i.e. if I publish something, it should be possible for someone else to reproduce it, using the description of the methods used in the publication. As biological sciences have become increasingly reliant on computational methods, this has become a bigger and bigger issue, especially as the results of experiments become dependent on independently developed computational code, or use rather sophisticated computer packages that have a variety of settings that can affect output, and multiple versions. For further discussion on this issue, you might want to read [[set of links]].
+
+I recently read a couple of different publications that really made me realize how big a problem this is. I want to spend some time showing what the problem is in these publications, and why we should be concerned about the current state of computational analytical reproducibility in life-sciences.
+
+In both the articles mentioned below, I do not believe that I, or anyone not associated with the project, would be able to generate even approximately similar results based solely on the raw data and the description of methods provided. Ultimately, this is a failure of both those doing the analysis, and the reviewers who reviewed the work, and is a rather deplorable situation for a field that prides itself verification of results.
+
+## Puthanveettil et al., Synaptic Transcriptome
+
+[Puthanveettil et al](http://doi.org/10.1073/pnas.1304422110) had a paper out earlier titled ["A strategy to capture and characterize the synaptic transcriptome"](http://doi.org/10.1073/pnas.1304422110). Although the primary development reported is a new method of characterizing RNA complexes that are carried by kinesin, much of the following analysis is bioinformatic in nature.
+
+For example, they used BLAST searches to identify the RNA molecules, a cutoff value is reported in the results. However, functional characterization using Gene Ontology (GO) was carried out by "Bioinformatics analyses" (see the top of pg3 in the PDF). No mention of where the GO terms came from, which annotation source was used, or any software mentioned. Not in the results, discussion, or methods, or the supplemental methods. The microarray data analysis isn't too badly described, but the 454 sequencing data processing isn't really described at all.
+
+My point is, that even given their raw data, I'm not sure I would be able to even approximate their results based on the methods reported in the methods section.
+
